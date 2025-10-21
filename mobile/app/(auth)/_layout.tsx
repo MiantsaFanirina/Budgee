@@ -1,6 +1,13 @@
 import React from 'react';
-import {Stack} from "expo-router";
+import {Redirect, Stack} from "expo-router";
+import {useUserStore} from "@/context/userContext";
 const AuthLayout = () => {
+  const isLoggedIn = useUserStore((state) => state.loggedIn);
+
+  if (isLoggedIn) {
+    return <Redirect href="/(main)" />;
+  }
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

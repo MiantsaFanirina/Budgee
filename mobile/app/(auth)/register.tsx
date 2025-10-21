@@ -81,7 +81,7 @@ const Register: React.FC = () => {
         setPasswordError(pMsg);
         setConfirmError(cMsg);
 
-        // Only check strength if password is not empty
+        // Only check strength if the password is not empty
         setPasswordStrength(password ? checkPasswordStrength(password) : "");
 
         if (!uMsg && !eMsg && !pMsg && !cMsg) {
