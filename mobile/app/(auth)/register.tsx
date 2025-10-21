@@ -133,7 +133,7 @@ const Register: React.FC = () => {
                     {/* Password Field */}
                     <View className="flex flex-col">
                         <Text className="font-semibold mb-2">Password</Text>
-                        <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] px-3">
+                        <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
                             <TextInput
                                 placeholder="Enter password"
                                 placeholderTextColor="gray"
@@ -141,7 +141,7 @@ const Register: React.FC = () => {
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 textContentType="none"
-                                className="grow"
+                                className="grow w-[90%] pl-3 pr-12"
                                 value={password}
                                 onChangeText={(text) => {
                                     setPassword(text);
@@ -153,7 +153,7 @@ const Register: React.FC = () => {
                                     textAlignVertical: "center",
                                 }}
                             />
-                            <Pressable onPress={togglePassword}>
+                            <Pressable onPress={togglePassword} className={'absolute right-3'}>
                                 <Animated.View style={animatedStyle}>
                                     {showPassword ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
                                 </Animated.View>
@@ -170,7 +170,7 @@ const Register: React.FC = () => {
                     {/* Confirm Password Field */}
                     <View className="flex flex-col">
                         <Text className="font-semibold mb-2">Confirm Password</Text>
-                        <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] px-3">
+                        <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
                             <TextInput
                                 placeholder="Confirm password"
                                 placeholderTextColor="gray"
@@ -178,7 +178,7 @@ const Register: React.FC = () => {
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 textContentType="none"
-                                className="grow"
+                                className="grow w-[90%] pl-3 pr-12"
                                 value={confirmPassword}
                                 onChangeText={(text) => {
                                     setConfirmPassword(text);
@@ -189,7 +189,7 @@ const Register: React.FC = () => {
                                     textAlignVertical: "center",
                                 }}
                             />
-                            <Pressable onPress={toggleConfirmPassword}>
+                            <Pressable onPress={toggleConfirmPassword} className={'absolute right-3'}>
                                 <Animated.View style={animatedStyleConfirm}>
                                     {showConfirm ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
                                 </Animated.View>
