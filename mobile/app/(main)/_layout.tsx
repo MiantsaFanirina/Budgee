@@ -13,6 +13,7 @@ const DashboardLayout = () => {
   return (
     <Tabs>
       <Tabs.Screen name="index" options={{ headerShown: false, title: 'Dashboard' }} />
+      <Tabs.Screen name="transaction" options={{ headerShown: false, title: 'Transaction' }} />
     </Tabs>
   );
 };

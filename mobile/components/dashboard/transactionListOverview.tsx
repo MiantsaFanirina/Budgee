@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 import { useTransactionStore } from "@/context/transactionContext";
 import TransactionCard from "@/components/dashboard/transactionCard";
-import { Ionicons } from "@expo/vector-icons";
+import {Ionicons} from "@expo/vector-icons";
+import Summary from "@/components/dashboard/summary";
 
 const TransactionListOverview = () => {
   const transactions = useTransactionStore((state) => state.transactions);
@@ -18,6 +19,9 @@ const TransactionListOverview = () => {
   return (
     <View className="bg-gray-100 h-full pt-[75px] pb-6 px-6">
       <View className="w-full h-full bg-white border border-gray-200 rounded-md p-4">
+
+        <Summary/>
+
         <View className="py-4 px-3 flex flex-row items-center justify-between">
           <Text className={"font-semibold text-gray-500"}>RECENT TRANSACTIONS</Text>
           <View className={"flex flex-row gap-1 items-center"}>
@@ -25,11 +29,12 @@ const TransactionListOverview = () => {
             <Ionicons name="arrow-forward" color="#000" size={16} />
           </View>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
+
+        <View>
           {recentTransactions.map((t) => (
             <TransactionCard key={t.id} transaction={t} />
           ))}
-        </ScrollView>
+        </View>
       </View>
     </View>
   );
