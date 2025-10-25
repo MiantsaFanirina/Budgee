@@ -9,45 +9,53 @@ const Summary = () => {
         <Text className={"font-semibold text-gray-500"}>OVERVIEW OF THE MONTH</Text>
       </View>
 
-      <View className={"flex flex-col px-3 py-4 gap-4"}>
-        <View className="flex flex-row items-center gap-2">
-          <View className="grow flex flex-col  bg-green-200 p-3 rounded-md">
-            <View className={"flex flex-row items-center relative mb-1"}>
+      <View className="flex-row flex-wrap px-3 py-4">
+        {/* Saving */}
+        <View className="w-1/2 p-1">
+          <View className="bg-green-100 p-6 rounded-md">
+            <View className="flex-row items-center mb-1">
               <MaterialCommunityIcons name="piggy-bank-outline" color="#000" size={13} />
-              <Text className={"font-bold left-[20px] absolute"}>Saving</Text>
+              <Text className="font-bold ml-1">Saving</Text>
             </View>
-            <Text className="font-bold text-xl text-green-600">$1,200.00</Text>
-          </View>
-
-          <View className="grow flex flex-col bg-amber-100 p-3 rounded-md">
-            <View className={"flex flex-row items-center relative mb-1"}>
-              <MaterialCommunityIcons name="food-apple-outline" color="#000" size={13} />
-              <Text className={"font-bold left-[20px] absolute"}>Food</Text>
-            </View>
-            <Text className="font-bold text-xl text-amber-500">$1,200.00</Text>
+            <Text className="font-bold text-xl text-green-600">$129.00</Text>
           </View>
         </View>
 
-
-        <View className="flex flex-row items-center gap-2">
-          <View className="grow flex flex-col bg-red-100 p-3 rounded-md">
-            <View className={"flex flex-row items-center relative mb-1"}>
-              <MaterialCommunityIcons name="calendar-check-outline" color="#000" size={12} />
-              <Text className={"font-bold left-[20px] absolute"}>Bills</Text>
+        {/* Food */}
+        <View className="w-1/2 p-1">
+          <View className="bg-amber-100 p-6 rounded-md">
+            <View className="flex-row items-center mb-1">
+              <MaterialCommunityIcons name="food-apple-outline" color="#000" size={13} />
+              <Text className="font-bold ml-1">Food</Text>
             </View>
-            <Text className="font-bold text-xl text-red-400">$1,200.00</Text>
+            <Text className="font-bold text-xl text-amber-500">$152.80</Text>
           </View>
+        </View>
 
-          <View className="grow flex flex-col bg-blue-100 p-3 rounded-md">
-            <View className={"flex flex-row items-center relative mb-1"}>
-              <Ionicons name="bus" color="#000" size={11} />
-              <Text className={"font-bold left-[20px] absolute"}>Transport</Text>
+        {/* Bills */}
+        <View className="w-1/2 p-1">
+          <View className="bg-purple-100 p-6 rounded-md">
+            <View className="flex-row items-center mb-1">
+              <MaterialCommunityIcons name="calendar-check-outline" color="#000" size={12} />
+              <Text className="font-bold ml-1">Bills</Text>
             </View>
-            <Text className="font-bold text-xl text-blue-500">$1,200.00</Text>
+            <Text className="font-bold text-xl text-purple-400">$1,200.00</Text>
+          </View>
+        </View>
+
+        {/* Transport */}
+        <View className="w-1/2 p-1">
+          <View className="bg-blue-100 p-6 rounded-md">
+            <View className="flex-row items-center mb-1">
+              <Ionicons name="bus" color="#000" size={11} />
+              <Text className="font-bold ml-1">Transport</Text>
+            </View>
+            <Text className="font-bold text-xl text-blue-500">$45.00</Text>
           </View>
         </View>
 
       </View>
+
     </View>
   );
 };
