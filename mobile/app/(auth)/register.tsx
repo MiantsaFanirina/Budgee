@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Pressable,
   Text,
@@ -7,7 +7,7 @@ import {
   View,
   Image,
   Platform,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, ScrollView, Keyboard,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -15,8 +15,14 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { Eye, EyeOff } from "lucide-react-native";
-import { Link } from "expo-router";
+import {Link, router} from "expo-router";
 import { checkPasswordStrength, getPasswordColor } from "@/utils/password";
+import {
+  useFonts,
+  ImperialScript_400Regular
+} from '@expo-google-fonts/imperial-script';
+import {SafeAreaView} from "react-native-safe-area-context";
+
 const Register: React.FC = () => {
 
   // Form input states
@@ -35,6 +41,24 @@ const Register: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string>("");
   const [confirmError, setConfirmError] = useState<string>("");
   const [passwordStrength, setPasswordStrength] = useState<string>("");
+
+  //  Detect keyboard visibility
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener("keyboardDidShow", () =>
+      setKeyboardVisible(true)
+    );
+    const hideSub = Keyboard.addListener("keyboardDidHide", () =>
+      setKeyboardVisible(false)
+    );
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
 
   // Reanimated icon rotation values
   const rotation = useSharedValue(0);
@@ -86,160 +110,180 @@ const Register: React.FC = () => {
 
     if (!uMsg && !eMsg && !pMsg && !cMsg) {
       console.log("Registering:", { username, email, password });
-      // TODO: Connect to API here
+      router.push("/otp")
     }
   };
 
+  // initialize fonts
+  const [fontsLoaded] = useFonts({
+    ImperialScript: ImperialScript_400Regular,
+  });
+
+  if (!fontsLoaded) {
+    return null; // or a loading indicator
+  }
+
   return (
-    <View className="flex items-center justify-center w-screen h-screen bg-white px-12">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex flex-col gap-6 w-full"
-      >
-        <View className="flex flex-col gap-3">
+    <View className="flex items-center  justify-center w-screen h-screen">
 
-          <View className={'flex flex-row justify-center mb-6'}>
-            <Image
-              source={require("../../assets/images/branding.png")}
-              style={{ width: 156, height: 53 }}
-              resizeMode="cover"
-            />
-          </View>
-          <View className={'flex flex-row justify-center mb-6'}>
-            <Text className="text-6xl px-3 font-bold font-imperial-script">Register now</Text>
-          </View>
-
-          {/* Username Field */}
-          <View className="flex flex-col">
-            <Text className="font-semibold mb-2">Username</Text>
-            <TextInput
-              className="border border-gray-400 rounded-md min-w-[250px] h-[40px] pl-[12px] px-3"
-              placeholder="Enter username"
-              placeholderTextColor="gray"
-              value={username}
-              onChangeText={(text) => {
-                setUsername(text);
-                if (usernameError) setUsernameError(validateUsername(text));
-              }}
-            />
-            {usernameError ? <Text className="text-red-500 mt-1">{usernameError}</Text> : null}
-          </View>
-
-          {/* Email Field */}
-          <View className="flex flex-col">
-            <Text className="font-semibold mb-2">Email</Text>
-            <TextInput
-              className="border border-gray-400 rounded-md min-w-[250px] h-[40px] pl-[12px] px-3"
-              placeholder="Enter email"
-              placeholderTextColor="gray"
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                if (emailError) setEmailError(validateEmail(text));
-              }}
-            />
-            {emailError ? <Text className="text-red-500 mt-1">{emailError}</Text> : null}
-          </View>
-
-          {/* Password Field */}
-          <View className="flex flex-col">
-            <Text className="font-semibold mb-2">Password</Text>
-            <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
-              <TextInput
-                placeholder="Enter password"
-                placeholderTextColor="gray"
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                autoCorrect={false}
-                textContentType="none"
-                className="grow w-[90%] pl-3 pr-12"
-                value={password}
-                onChangeText={(text) => {
-                  setPassword(text);
-                  setPasswordStrength(text ? checkPasswordStrength(text) : "");
-                  if (passwordError) setPasswordError(validatePassword(text));
-                }}
-                style={{
-                  paddingVertical: Platform.OS === "ios" ? 12 : 0,
-                  textAlignVertical: "center",
-                }}
-              />
-              <Pressable onPress={togglePassword} className={'absolute right-3'}>
-                <Animated.View style={animatedStyle}>
-                  {showPassword ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
-                </Animated.View>
-              </Pressable>
-            </View>
-            {passwordError ? <Text className="text-red-500 mt-1">{passwordError}</Text> : null}
-            {password && passwordStrength ? (
-              <Text className="mt-1" style={{ color: getPasswordColor(passwordStrength) }}>
-                {passwordStrength}
-              </Text>
-            ) : null}
-          </View>
-
-          {/* Confirm Password Field */}
-          <View className="flex flex-col">
-            <Text className="font-semibold mb-2">Confirm Password</Text>
-            <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
-              <TextInput
-                placeholder="Confirm password"
-                placeholderTextColor="gray"
-                secureTextEntry={!showConfirm}
-                autoCapitalize="none"
-                autoCorrect={false}
-                textContentType="none"
-                className="grow w-[90%] pl-3 pr-12"
-                value={confirmPassword}
-                onChangeText={(text) => {
-                  setConfirmPassword(text);
-                  if (confirmError) setConfirmError(validateConfirm(text));
-                }}
-                style={{
-                  paddingVertical: Platform.OS === "ios" ? 12 : 0,
-                  textAlignVertical: "center",
-                }}
-              />
-              <Pressable onPress={toggleConfirmPassword} className={'absolute right-3'}>
-                <Animated.View style={animatedStyleConfirm}>
-                  {showConfirm ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
-                </Animated.View>
-              </Pressable>
-            </View>
-            {confirmError ? <Text className="text-red-500 mt-1">{confirmError}</Text> : null}
-          </View>
-
-          {/* Register Button */}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            className="flex items-center justify-center min-w-[250px] bg-black h-[40px] rounded-md mt-3"
-            onPress={handleRegister}
+      <SafeAreaView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex flex-col gap-6 w-full px-12"
+        >
+          {/*  ScrollView is only scrollable when keyboard is visible */}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            keyboardShouldPersistTaps={"handled"}
+            scrollEnabled={isKeyboardVisible}
           >
-            <Text className="font-bold text-white">Register</Text>
-          </TouchableOpacity>
+            <View className="flex flex-col gap-3">
 
-          {/* Register with Google */}
-          <TouchableOpacity
-            activeOpacity={0.5}
-            className="flex flex-row items-center justify-center gap-3 min-w-[250px] border border-black h-[40px] rounded-md mt-2"
-          >
-            <Image
-              source={require("../../assets/images/google.png")}
-              style={{ width: 16, height: 16 }}
-              resizeMode="cover"
-            />
-            <Text className="font-bold text-black">Register with Google</Text>
-          </TouchableOpacity>
+              <View className={'flex flex-row justify-center mb-6'}>
+                <Image
+                  source={require("../../assets/images/branding.png")}
+                  style={{ width: 156, height: 53 }}
+                  resizeMode="cover"
+                />
+              </View>
+              <View className={'flex flex-row justify-center mb-3'}>
+                <Text className="text-6xl px-3 font-bold font-imperial-script">Register now</Text>
+              </View>
 
-          {/* Navigation to Login */}
-          <View className="w-full flex flex-row justify-center gap-1 mt-3 mb-6">
-            <Text>Already have an account?</Text>
-            <Link href="/login">
-              <Text className="text-blue-500 underline">Login</Text>
-            </Link>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+              {/* Username Field */}
+              <View className="flex flex-col">
+                <Text className="font-semibold mb-2">Username</Text>
+                <TextInput
+                  className="border border-gray-400 rounded-md min-w-[250px] h-[40px] pl-[12px] px-3"
+                  placeholder="Enter username"
+                  placeholderTextColor="gray"
+                  value={username}
+                  onChangeText={(text) => {
+                    setUsername(text);
+                    if (usernameError) setUsernameError(validateUsername(text));
+                  }}
+                />
+                {usernameError ? <Text className="text-red-500 mt-1">{usernameError}</Text> : null}
+              </View>
+
+              {/* Email Field */}
+              <View className="flex flex-col">
+                <Text className="font-semibold mb-2">Email</Text>
+                <TextInput
+                  className="border border-gray-400 rounded-md min-w-[250px] h-[40px] pl-[12px] px-3"
+                  placeholder="Enter email"
+                  placeholderTextColor="gray"
+                  value={email}
+                  onChangeText={(text) => {
+                    setEmail(text);
+                    if (emailError) setEmailError(validateEmail(text));
+                  }}
+                />
+                {emailError ? <Text className="text-red-500 mt-1">{emailError}</Text> : null}
+              </View>
+
+              {/* Password Field */}
+              <View className="flex flex-col">
+                <Text className="font-semibold mb-2">Password</Text>
+                <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
+                  <TextInput
+                    placeholder="Enter password"
+                    placeholderTextColor="gray"
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    textContentType="none"
+                    className="grow w-[90%] pl-3 pr-12"
+                    value={password}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      setPasswordStrength(text ? checkPasswordStrength(text) : "");
+                      if (passwordError) setPasswordError(validatePassword(text));
+                    }}
+                    style={{
+                      paddingVertical: Platform.OS === "ios" ? 12 : 0,
+                      textAlignVertical: "center",
+                    }}
+                  />
+                  <Pressable onPress={togglePassword} className={'absolute right-3'}>
+                    <Animated.View style={animatedStyle}>
+                      {showPassword ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
+                    </Animated.View>
+                  </Pressable>
+                </View>
+                {passwordError ? <Text className="text-red-500 mt-1">{passwordError}</Text> : null}
+                {password && passwordStrength ? (
+                  <Text className="mt-1" style={{ color: getPasswordColor(passwordStrength) }}>
+                    {passwordStrength}
+                  </Text>
+                ) : null}
+              </View>
+
+              {/* Confirm Password Field */}
+              <View className="flex flex-col">
+                <Text className="font-semibold mb-2">Confirm Password</Text>
+                <View className="flex flex-row justify-between items-center border border-gray-400 rounded-md min-w-[250px] h-[40px] relative overflow-hidden">
+                  <TextInput
+                    placeholder="Confirm password"
+                    placeholderTextColor="gray"
+                    secureTextEntry={!showConfirm}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    textContentType="none"
+                    className="grow w-[90%] pl-3 pr-12"
+                    value={confirmPassword}
+                    onChangeText={(text) => {
+                      setConfirmPassword(text);
+                      if (confirmError) setConfirmError(validateConfirm(text));
+                    }}
+                    style={{
+                      paddingVertical: Platform.OS === "ios" ? 12 : 0,
+                      textAlignVertical: "center",
+                    }}
+                  />
+                  <Pressable onPress={toggleConfirmPassword} className={'absolute right-3'}>
+                    <Animated.View style={animatedStyleConfirm}>
+                      {showConfirm ? <Eye size={18} color="gray" /> : <EyeOff size={18} color="gray" />}
+                    </Animated.View>
+                  </Pressable>
+                </View>
+                {confirmError ? <Text className="text-red-500 mt-1">{confirmError}</Text> : null}
+              </View>
+
+              {/* Register Button */}
+              <TouchableOpacity
+                activeOpacity={0.8}
+                className="flex items-center justify-center min-w-[250px] bg-black h-[40px] rounded-md mt-3"
+                onPress={handleRegister}
+              >
+                <Text className="font-bold text-white">Register</Text>
+              </TouchableOpacity>
+
+              {/* Register with Google */}
+              <TouchableOpacity
+                activeOpacity={0.5}
+                className="flex flex-row items-center justify-center gap-3 min-w-[250px] border border-black h-[40px] rounded-md mt-2"
+              >
+                <Image
+                  source={require("../../assets/images/google.png")}
+                  style={{ width: 16, height: 16 }}
+                  resizeMode="cover"
+                />
+                <Text className="font-bold text-black">Register with Google</Text>
+              </TouchableOpacity>
+
+              {/* Navigation to Login */}
+              <View className="w-full flex flex-row justify-center gap-1 mt-3 mb-6">
+                <Text>Already have an account?</Text>
+                <Pressable onPress={() => router.back()}>
+                  <Text className="text-blue-500 underline">Login</Text>
+                </Pressable>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </View>
   );
 };
