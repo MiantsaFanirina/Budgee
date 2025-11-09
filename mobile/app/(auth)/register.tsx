@@ -17,8 +17,8 @@ import Animated, {
 import { Eye, EyeOff } from "lucide-react-native";
 import { Link } from "expo-router";
 import { checkPasswordStrength, getPasswordColor } from "@/utils/password";
-
 const Register: React.FC = () => {
+
   // Form input states
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -97,6 +97,17 @@ const Register: React.FC = () => {
         className="flex flex-col gap-6 w-full"
       >
         <View className="flex flex-col gap-3">
+
+          <View className={'flex flex-row justify-center mb-6'}>
+            <Image
+              source={require("../../assets/images/branding.png")}
+              style={{ width: 156, height: 53 }}
+              resizeMode="cover"
+            />
+          </View>
+          <View className={'flex flex-row justify-center mb-6'}>
+            <Text className="text-6xl px-3 font-bold font-imperial-script">Register now</Text>
+          </View>
 
           {/* Username Field */}
           <View className="flex flex-col">

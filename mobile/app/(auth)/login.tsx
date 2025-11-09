@@ -70,7 +70,16 @@ const Login: React.FC = () => {
         className="flex flex-col gap-6 w-full"
       >
         <View className="flex flex-col gap-3">
-
+          <View className={'flex flex-row justify-center mb-6'}>
+            <Image
+              source={require("../../assets/images/branding.png")}
+              style={{ width: 156, height: 53 }}
+              resizeMode="cover"
+            />
+          </View>
+          <View className={'flex flex-row justify-center mb-6'}>
+            <Text className="text-6xl px-3 font-bold font-imperial-script">Welcome back</Text>
+          </View>
           {/* Email input field */}
           <View className="flex flex-col">
             <Text className="font-semibold mb-2">Email</Text>
