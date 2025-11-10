@@ -106,8 +106,17 @@ const Login: React.FC = () => {
                 />
               </View>
               <View className="flex flex-row justify-center mb-3">
-                <Text className="text-6xl px-3 font-bold font-imperial-script">
-                  Welcome back
+                <Text
+                  className="text-6xl px-6"
+                  style={{
+                    fontFamily: "ImperialScript_400Regular",
+                    fontSize: 60,
+                    includeFontPadding: false,
+                    textAlign: "center"
+
+                  }}
+                >
+                  {"\u00A0"}Welcome back{"\u00A0"}{"\u00A0"}
                 </Text>
               </View>
 

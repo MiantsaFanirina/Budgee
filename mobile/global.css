@@ -1,11 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
 
 @import "nativewind/theme";
-
-@theme {
-    --font-imperial-script: 'Imperial Script', cursive;
-    --font-playfair-display: 'Playfair Display', serif;
-}
